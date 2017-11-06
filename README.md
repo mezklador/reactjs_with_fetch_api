@@ -28,8 +28,10 @@ The main loader is *src/index.js*:
 ```javascript
 import Userlist from './users/Users'
 
-ReactDOM.render(<Userlist />, document.getElementById('root'))
+ReactDOM.render(<Userlist qty="127" />, document.getElementById('root'))
 ``` 
+
+As you can see, **qty prop** is great to dynamically change users' quantity to load in this app. Also, check out how you can pass through the *render()* method customized variables (in ES6 backtick convienient templating format). There's also an attempt to display a **loader** at first, then the content once the *AJAX* call is done and data are ready to go!
 
 And I use [spectre.css](https://picturepan2.github.io/spectre/) framework for a little bit of sugar...
 
