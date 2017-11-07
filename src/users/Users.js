@@ -15,16 +15,12 @@ class Userlist extends Component {
     super(props)
     this.state = {
       guys: [],
-      status: 'ok',
-      loading: true
+      status: null
     }
     this.url = `https://randomuser.me/api/?results=${this.props.qty}`
   }
 
   componentWillMount() {
-    this.setState({
-      loading: true
-    })
   }
 
   componentDidMount() {
@@ -33,7 +29,7 @@ class Userlist extends Component {
       .then(data => {
         this.setState({
           guys: data.results,
-          loading: false
+          status: 'ok'
         })
       }).catch( _ => {
         this.setState({
@@ -43,50 +39,51 @@ class Userlist extends Component {
   }
 
   render() {
-    console.log(this.state.guys, this.state.loading)
-    const howMany = this.state.guys.length !== 0 ? this.state.guys.length : 'None'
-    const {loading} = this.state
+    console.log(this.state.guys)
+    let howMany
+    let Users
 
-    if (loading) {
-      return (
-        <div className="loading-lg"></div>
-      )
+    if (this.state.status == null) {
+      howMany = 0
+      Users = 'no-users'
+    } else {
+      Users = 'users'
+      howMany = this.state.guys.length
     }
-
     return (
-      <div className="users">
-        <h1>{howMany} users</h1>
-        <p>Here is a list of {howMany} users.</p>
-          <div className="columns">
-          {this.state.guys.map((a,i) => {
-            const firstname = capitalize(a.name.first)
-            const lastname = capitalize(a.name.last)
-            const keyName = `user-${i + 1}`
-            const altTag = `${a.name.first}-${a.name.last}`
-            const titleTag = `${firstname} ${lastname}`
-            return (
-              <div className="column col-lg-6" key={keyName} id={keyName}>
-                <div className="card">
-                  <div className="card-image">
-                    <img src={a.picture.large} className="img-responsive" alt={altTag} title={titleTag} />
-                  </div>
-                  <div className="card-header">
-                    <div className="card-title h5">{a.name.title} {firstname} {lastname}</div>
-                    <div className="card-subtitle text-gray">Registered: {a.registered}</div>
-                  </div>
-                  <div className="card-body">
-                    Address: {a.location.address} {a.location.postcode} {a.location.city} {a.location.state} {a.nat}
-                  </div>
-                  <div className="card-footer">
-                    <strong>Mobile Phone:</strong> {a.cell}<br/>
-                    <strong>Email:</strong> {a.email}
-                  </div>
+      <div className={Users}>
+      <h1>{howMany} users</h1>
+      <p>Here is a list of {howMany} users.</p>
+        <div className="columns">
+        {this.state.guys.map((a,i) => {
+          const firstname = capitalize(a.name.first)
+          const lastname = capitalize(a.name.last)
+          const keyName = `user-${i + 1}`
+          const altTag = `${a.name.first}-${a.name.last}`
+          const titleTag = `${firstname} ${lastname}`
+          return (
+            <div className="column col-lg-6" key={keyName} id={keyName}>
+              <div className="card">
+                <div className="card-image">
+                  <img src={a.picture.large} className="img-responsive" alt={altTag} title={titleTag} />
+                </div>
+                <div className="card-header">
+                  <div className="card-title h5">{a.name.title} {firstname} {lastname}</div>
+                  <div className="card-subtitle text-gray">Registered: {a.registered}</div>
+                </div>
+                <div className="card-body">
+                  Address: {a.location.address} {a.location.postcode} {a.location.city} {a.location.state} {a.nat}
+                </div>
+                <div className="card-footer">
+                  <strong>Mobile Phone:</strong> {a.cell}<br/>
+                  <strong>Email:</strong> {a.email}
                 </div>
               </div>
-            )
-          })}
-        </div>
+            </div>
+          )
+        })}
       </div>
+    </div>
     )
   }
 }
